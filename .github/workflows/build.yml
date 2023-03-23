@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  # pull_request:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    env:
+      BASE_IMAGE: quay.io/kairos/core-alpine:latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build ISO
+        # env:
+        #   REPO_USER: ${{ secrets.REPO_USER }}
+        #   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        shell: bash
+        run: |
+         bash build.sh
+
+
+
+#  echo "machine github.com" > .netrc
+#           echo "    login $REPO_USER" >> .netrc
+#           echo "    password $REPO_TOKEN" >> .netrc
+#           echo "machine api.github.com" >> .netrc
+#           echo "    login $REPO_USER" >> .netrc
+#           echo "    password $REPO_TOKEN" >> .netrc
+#       - uses: docker-practice/actions-setup-docker@master
+#       - uses: earthly/actions-setup@v1
+#       - run: earthly --ci -P +package --BASE_IMAGE="$BASE_IMAGE"
+# #      - run: earthly --ci -P +package-fips --BASE_IMAGE="$BASE_IMAGE" --FIPS_ENABLED=true # skip fips build in PRs

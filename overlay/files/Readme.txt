@@ -1,0 +1,1 @@
+An example overlay file which will be copied to the root file system at /
