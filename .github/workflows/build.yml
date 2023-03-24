@@ -27,9 +27,11 @@ jobs:
         # env:
         #   REPO_USER: ${{ secrets.REPO_USER }}
         #   REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        # docker login --username=${{ secrets.DOCKERHUB_USERNAME }} --password=${{ secrets.DOCKERHUB_TOKEN }}
         shell: bash
         run: |
-         bash build.sh
+          docker login --username=${{ secrets.DOCKERHUB_USERNAME }} --password=${{ secrets.DOCKERHUB_TOKEN }}
+          bash build.sh
       - run: |
           if [[ "${{ github.ref }}" =~ .*-.*$ ]]; then
             echo "IS_PRERELEASE=true" > $GITHUB_ENV
@@ -39,6 +41,7 @@ jobs:
           files: build/*
           prerelease: ${{ env.IS_PRERELEASE }}
           generate_release_notes: true
+
 
 
 #  echo "machine github.com" > .netrc

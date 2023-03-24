@@ -11,7 +11,6 @@ K8S_PROVIDER_VERSION=v1.2.3
 KAIROS_VERSION="${KAIROS_VERSION:-v1.5.0}"
 BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:"${KAIROS_VERSION}"
 
-
 echo "Building Installer image $INSTALLER_IMAGE from $BASE_IMAGE"
 docker build  --build-arg BASE_IMAGE=$BASE_IMAGE \
               --build-arg SPECTRO_VERSION=$SPECTRO_VERSION \
@@ -44,4 +43,4 @@ if [[ "$PUSH_BUILD" == "true" ]]; then
   docker push "$INSTALLER_IMAGE"
 fi
 
-aws s3 cp /cOS/ s3://s3://edgeforge/images/$INSTALLER_IMAGE
+aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION.iso --profile gh-runner
