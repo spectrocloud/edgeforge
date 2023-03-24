@@ -4,7 +4,7 @@ set -xe
 source .versions.env
 
 ISO_IMAGE_NAME=spectro-edge-installer
-IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-registry.hub.docker.com/3pings/ubuntu-k3s}"
+IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-3pings}"
 INSTALLER_IMAGE=${IMAGE_REPOSITORY}/${ISO_IMAGE_NAME}:${SPECTRO_VERSION}
 BUILD_PLATFORM="${BUILD_PLATFORM:-linux/amd64}"
 K8S_PROVIDER_VERSION=v1.2.3
