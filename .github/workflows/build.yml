@@ -40,15 +40,15 @@ jobs:
         run: |
           
           bash build.sh
-      - run: |
-          if [[ "${{ github.ref }}" =~ .*-.*$ ]]; then
-            echo "IS_PRERELEASE=true" > $GITHUB_ENV
-          fi
-      - uses: softprops/action-gh-release@v1
-        with:
-          files: build/*
-          prerelease: ${{ env.IS_PRERELEASE }}
-          generate_release_notes: true
+      # - run: |
+      #     if [[ "${{ github.ref }}" =~ .*-.*$ ]]; then
+      #       echo "IS_PRERELEASE=true" > $GITHUB_ENV
+      #     fi
+      # - uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: build/*
+      #     prerelease: ${{ env.IS_PRERELEASE }}
+      #     generate_release_notes: true
 
 
 
