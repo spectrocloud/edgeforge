@@ -4,7 +4,7 @@ set -xe
 source .versions.env
 
 ISO_IMAGE_NAME=spectro-edge-installer
-IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-3pings}"
+IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-registry.hub.docker.com/3pings/ubuntu-k3s}"
 INSTALLER_IMAGE=${IMAGE_REPOSITORY}/${ISO_IMAGE_NAME}:${SPECTRO_VERSION}
 BUILD_PLATFORM="${BUILD_PLATFORM:-linux/amd64}"
 K8S_PROVIDER_VERSION=v1.2.3
@@ -17,7 +17,6 @@ docker build  --build-arg BASE_IMAGE=$BASE_IMAGE \
               --build-arg SPECTRO_VERSION=$SPECTRO_VERSION \
                -t $INSTALLER_IMAGE -f images/Dockerfile .
 
-# mkdir -p $LOCAL_CONTENT_FOLDER
 for k8s_version in ${K8S_VERSIONS//,/ }
 do
     IMAGE=${IMAGE_REPOSITORY}/core-ubuntu-22-lts-k3s:v${k8s_version}_${K8S_PROVIDER_VERSION}
@@ -26,6 +25,10 @@ do
                  --build-arg SPECTRO_VERSION=$SPECTRO_VERSION \
                  -t $IMAGE \
                  -f images/Dockerfile ./
+    if [[ "$PUSH_BUILD" == "true" ]]; then
+      echo "Pushing image"
+      docker push "$IMAGE"
+    fi
 done
 
 find overlay/files-iso
@@ -38,5 +41,7 @@ docker run -v $PWD:/cOS \
 
 if [[ "$PUSH_BUILD" == "true" ]]; then
   echo "Pushing image"
-  docker push "$IMAGE"
+  docker push "$INSTALLER_IMAGE"
 fi
+
+aws s3 cp /cOS/ s3://s3://edgeforge/images/$INSTALLER_IMAGE

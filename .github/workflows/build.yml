@@ -1,10 +1,12 @@
 name: Build
-
+run-name: Build Installer ${{ github.event.inputs.version }}
 on:
   # pull_request:
   # push:
   #   branches:
   #     - main
+      # tags:
+      # - v*
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -15,7 +17,8 @@ permissions:
 
 jobs:
   package:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       BASE_IMAGE: quay.io/kairos/core-alpine:latest
     steps:
@@ -27,7 +30,15 @@ jobs:
         shell: bash
         run: |
          bash build.sh
-
+      - run: |
+          if [[ "${{ github.ref }}" =~ .*-.*$ ]]; then
+            echo "IS_PRERELEASE=true" > $GITHUB_ENV
+          fi
+      - uses: softprops/action-gh-release@v1
+        with:
+          files: build/*
+          prerelease: ${{ env.IS_PRERELEASE }}
+          generate_release_notes: true
 
 
 #  echo "machine github.com" > .netrc

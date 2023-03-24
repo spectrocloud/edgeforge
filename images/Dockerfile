@@ -1,7 +1,7 @@
 ############################Do not edit below this line##################################
 ARG BASE_IMAGE_TAG=v1.5.0
 ARG BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:v1.5.0
-ARG IMAGE_REPOSITORY=3pings/ubuntu-k3s
+ARG IMAGE_REPOSITORY=registry.hub.docker.com/3pings/ubuntu-k3s
 ARG SPECTRO_VERSION=v3.3.0
 FROM gcr.io/spectro-dev-public/stylus-framework:${SPECTRO_VERSION} as spectro-base
 FROM ghcr.io/kairos-io/provider-k3s:v1.2.3  as provider-k3s
@@ -34,7 +34,10 @@ ENV OS_REPO=${IMAGE_REPOSITORY}
 ENV OS_VERSION=${K8S_VERSION}_${SPECTRO_VERSION}
 ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
 RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
-
+   
+RUN apt-get update && apt-get install zstd -y
+   
+    
 ## Copy any custom files by placing in the directory specified below
 COPY overlay/files/ /
 ############################Do not edit above this line##################################
