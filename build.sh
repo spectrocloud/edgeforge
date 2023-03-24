@@ -38,9 +38,9 @@ docker run -v $PWD:/cOS \
              -i --rm quay.io/kairos/osbuilder-tools:v0.3.3 --name $ISO_IMAGE_NAME \
              --debug build-iso --date=false $INSTALLER_IMAGE  --local --overlay-iso /cOS/overlay/files-iso  --output /cOS/
 
-if [[ "$PUSH_BUILD" == "true" ]]; then
-  echo "Pushing image"
-  docker push "$INSTALLER_IMAGE"
-fi
+# if [[ "$PUSH_BUILD" == "true" ]]; then
+#   echo "Pushing image"
+#   docker push "$INSTALLER_IMAGE"
+# fi
 
 aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION.iso --profile gh-runner
