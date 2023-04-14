@@ -2,7 +2,7 @@
 ARG BASE_IMAGE_TAG=v1.5.0
 ARG BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:v1.5.0
 ARG IMAGE_REPOSITORY=3pings
-ARG SPECTRO_VERSION=v3.3.0
+ARG SPECTRO_VERSION=v3.3.2
 FROM gcr.io/spectro-dev-public/stylus-framework:${SPECTRO_VERSION} as spectro-base
 FROM ghcr.io/kairos-io/provider-k3s:v1.2.3  as provider-k3s
 
@@ -26,12 +26,10 @@ RUN mkdir -p /etc/luet/repos.conf.d && \
 
 RUN luet install -y  k8s/k3s@$K8S_VERSION && luet cleanup
 
-
-
-ENV OS_ID=${BASE_IMAGE_NAME}-k3s
-ENV OS_NAME=$OS_ID:${SPECTRO_VERSION}
+ENV OS_ID=ubuntu
+ENV OS_VERSION=22.04
+ENV OS_NAME=${BASE_IMAGE_NAME}-k3s:${SPECTRO_VERSION}
 ENV OS_REPO=${IMAGE_REPOSITORY}
-ENV OS_VERSION=${K8S_VERSION}_${SPECTRO_VERSION}
 ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
 RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
    
@@ -40,6 +38,17 @@ RUN apt-get update && apt-get install zstd -y
     
 ## Copy any custom files by placing in the directory specified below
 COPY overlay/files/ /
+   
+RUN apt-get update && apt-get upgrade -y
+RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
+            ln -sf "${kernel#/boot/}" /boot/vmlinuz
+RUN kernel=$(ls /lib/modules | head -n1) && \
+            dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
+            ln -sf "initrd-${kernel}" /boot/initrd
+RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
+RUN apt-get clean
+   
+    
 ############################Do not edit above this line##################################
 
 ###########################Add any other image customizations here #######################
@@ -55,5 +64,8 @@ COPY overlay/files/ /
 #RUN apt-get update && apt-get instal nginx
 
 ##########################################################################################
+RUN rm -f /etc/ssh/ssh_host_* /etc/ssh/moduli
+RUN /usr/bin/ssh-keygen -A -N ''
 # Clear cache
 RUN rm -rf /var/cache/*
+RUN apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm /var/lib/dbus/machine-id && rm /etc/hostname

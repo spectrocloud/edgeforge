@@ -3,13 +3,14 @@
 set -xe
 source .versions.env
 
-ISO_IMAGE_NAME=spectro-edge-installer
+ISO_IMAGE_NAME=spectro-edge-custom-installer
 IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-3pings}"
 INSTALLER_IMAGE=${IMAGE_REPOSITORY}/${ISO_IMAGE_NAME}:${SPECTRO_VERSION}
 BUILD_PLATFORM="${BUILD_PLATFORM:-linux/amd64}"
 K8S_PROVIDER_VERSION=v1.2.3
 KAIROS_VERSION="${KAIROS_VERSION:-v1.5.0}"
 BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:"${KAIROS_VERSION}"
+
 
 echo "Building Installer image $INSTALLER_IMAGE from $BASE_IMAGE"
 docker build  --build-arg BASE_IMAGE=$BASE_IMAGE \
@@ -18,7 +19,7 @@ docker build  --build-arg BASE_IMAGE=$BASE_IMAGE \
 
 for k8s_version in ${K8S_VERSIONS//,/ }
 do
-    IMAGE=${IMAGE_REPOSITORY}/core-ubuntu-22-lts-k3s:v${k8s_version}_${K8S_PROVIDER_VERSION}
+    IMAGE=${IMAGE_REPOSITORY}/core-ubuntu-22-lts-k3s:custom-v${k8s_version}_${K8S_PROVIDER_VERSION}
     docker build --build-arg K8S_VERSION=$k8s_version \
                  --build-arg BASE_IMAGE=$BASE_IMAGE \
                  --build-arg SPECTRO_VERSION=$SPECTRO_VERSION \
@@ -29,8 +30,6 @@ do
       docker push "$IMAGE"
     fi
 done
-
-find overlay/files-iso
 
 echo "Building $ISO_IMAGE_NAME.iso from $INSTALLER_IMAGE"
 docker run -v $PWD:/cOS \
@@ -43,4 +42,4 @@ docker run -v $PWD:/cOS \
 #   docker push "$INSTALLER_IMAGE"
 # fi
 
-aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION.iso --profile gh-runner
+aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION-alpha.iso --profile gh-runner

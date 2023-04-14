@@ -2,12 +2,14 @@ name: Build
 run-name: Build Installer ${{ github.event.inputs.version }}
 on:
   # pull_request:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+      - airgap-custom
+      - dover
       # tags:
       # - v*
-  workflow_dispatch:
+  # workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
