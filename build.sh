@@ -48,5 +48,5 @@ docker rmi $ISO_IMAGE_ID
 #   docker push "$INSTALLER_IMAGE"
 # fi
 
-aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION-$CANVOS_ENV.iso --profile gh-runner
+aws s3 cp $ISO_IMAGE_NAME.iso s3://edgeforge/images/$ISO_IMAGE_NAME-$SPECTRO_VERSION.iso --profile gh-runner
 rm $ISO_IMAGE_NAME.iso
