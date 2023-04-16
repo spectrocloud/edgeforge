@@ -1,8 +1,9 @@
 ############################Do not edit below this line##################################
 ARG BASE_IMAGE_TAG=v1.5.0
 ARG BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:v1.5.0
-ARG IMAGE_REPOSITORY=3pings
-ARG SPECTRO_VERSION=v3.3.2
+ARG IMAGE_REPOSITORY=registry.hub.docker.com/3pings/ubuntu-k3s
+ARG SPECTRO_VERSION=v3.3.3
+ARG SPECTRO_LUET_VERSION=v1.0.3
 FROM gcr.io/spectro-dev-public/stylus-framework:${SPECTRO_VERSION} as spectro-base
 FROM ghcr.io/kairos-io/provider-k3s:v1.2.3  as provider-k3s
 
@@ -20,11 +21,12 @@ COPY --from=spectro-base / /
 COPY --from=provider-k3s / /
 
 RUN mkdir -p /etc/luet/repos.conf.d && \
-    luet repo add spectro --type docker --url gcr.io/spectro-dev-public/luet-repo  --priority 1 -y && \
+    SPECTRO_LUET_VERSION=${SPECTRO_LUET_VERSION} luet repo add spectro --type docker --url gcr.io/spectro-dev-public/luet-repo  --priority 1 -y && \
     luet repo update
 
 
 RUN luet install -y  k8s/k3s@$K8S_VERSION && luet cleanup
+
 
 ENV OS_ID=ubuntu
 ENV OS_VERSION=22.04
@@ -32,7 +34,7 @@ ENV OS_NAME=${BASE_IMAGE_NAME}-k3s:${SPECTRO_VERSION}
 ENV OS_REPO=${IMAGE_REPOSITORY}
 ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
 RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
-   
+
 RUN apt-get update && apt-get install zstd -y
    
     
@@ -50,22 +52,16 @@ RUN apt-get clean
    
     
 ############################Do not edit above this line##################################
-
 ###########################Add any other image customizations here #######################
-## Uncomment the below commands to upgrade the base image at the time of building. Warning this can cause unknown issues not verified in the original images
-   
-# RUN apt-get update && apt-get upgrade -y
-   
-    
+
 #Examples
 # To install the nginx package from ubuntu or opensuse repos
 #RUN zypper refresh && zypper install nginx
 # or
-#RUN apt-get update && apt-get instal nginx
+#RUN apt-get update && apt-get install nginx
 
 ##########################################################################################
 RUN rm -f /etc/ssh/ssh_host_* /etc/ssh/moduli
-RUN /usr/bin/ssh-keygen -A -N ''
 # Clear cache
 RUN rm -rf /var/cache/*
 RUN apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm /var/lib/dbus/machine-id && rm /etc/hostname
