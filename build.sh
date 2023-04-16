@@ -2,8 +2,8 @@
 
 set -xe
 source .versions.env
-CANVOS_ENV="prod"
-ISO_IMAGE_NAME=spectro-edge-installer-$CANVOS_VERSION
+CANVOS_ENV=prod
+ISO_IMAGE_NAME=$CANVOS_ENV-installer
 IMAGE_REPOSITORY="${IMAGE_REPOSITORY:-registry.hub.docker.com/3pings/ubuntu-k3s}"
 INSTALLER_IMAGE=${IMAGE_REPOSITORY}/${ISO_IMAGE_NAME}:${SPECTRO_VERSION}
 ISO_IMAGE_ID=palette.io/${ISO_IMAGE_NAME}:${SPECTRO_VERSION}
