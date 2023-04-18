@@ -7,7 +7,7 @@ on:
       - main
       - airgap-custom
       - dover
-      - kubeconeu23
+      - kubecon23
       # tags:
       # - v*
   # workflow_dispatch:
