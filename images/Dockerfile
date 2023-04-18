@@ -42,12 +42,12 @@ RUN apt-get update && apt-get install zstd -y
 COPY overlay/files/ /
    
 RUN apt-get update && apt-get upgrade -y
-RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
-            ln -sf "${kernel#/boot/}" /boot/vmlinuz
-RUN kernel=$(ls /lib/modules | head -n1) && \
-            dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
-            ln -sf "initrd-${kernel}" /boot/initrd
-RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
+# RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
+#             ln -sf "${kernel#/boot/}" /boot/vmlinuz
+# RUN kernel=$(ls /lib/modules | head -n1) && \
+#             dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
+#             ln -sf "initrd-${kernel}" /boot/initrd
+# RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
 RUN apt-get clean
    
     
