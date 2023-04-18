@@ -12,6 +12,7 @@ K8S_PROVIDER_VERSION=v1.2.3
 KAIROS_VERSION="${KAIROS_VERSION:-v1.5.0}"
 BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:"${KAIROS_VERSION}"
 
+docker system prune -af
 
 echo "Building Installer image $INSTALLER_IMAGE from $BASE_IMAGE"
 docker build --build-arg BASE_IMAGE=$BASE_IMAGE \
