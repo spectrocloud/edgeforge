@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install zstd -y
 ## Copy any custom files by placing in the directory specified below
 COPY overlay/files/ /
    
-RUN apt-get update && apt-get upgrade -y
+# RUN apt-get update && apt-get upgrade -y
 # RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
 #             ln -sf "${kernel#/boot/}" /boot/vmlinuz
 # RUN kernel=$(ls /lib/modules | head -n1) && \
