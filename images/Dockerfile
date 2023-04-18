@@ -41,14 +41,15 @@ RUN apt-get update && apt-get install zstd -y
 ## Copy any custom files by placing in the directory specified below
 COPY overlay/files/ /
    
-# RUN apt-get update && apt-get upgrade -y
-# RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
-#             ln -sf "${kernel#/boot/}" /boot/vmlinuz
-# RUN kernel=$(ls /lib/modules | head -n1) && \
-#             dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
-#             ln -sf "initrd-${kernel}" /boot/initrd
-# RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
-# RUN apt-get clean
+RUN apt-get update && apt-get upgrade -y
+RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
+            ln -sf "${kernel#/boot/}" /boot/vmlinuz
+RUN kernel=$(ls /lib/modules | head -n1) && \
+            dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
+            ln -sf "initrd-${kernel}" /boot/initrd
+RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
+RUN apt-get install -y shim-signed mokutil grub-efi-amd64-signed
+RUN apt-get clean
    
     
 ############################Do not edit above this line##################################
@@ -64,5 +65,5 @@ COPY overlay/files/ /
 RUN rm -f /etc/ssh/ssh_host_* /etc/ssh/moduli
 # Clear cache
 RUN rm -rf /var/cache/*
-RUN apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm -rf /var/lib/dbus/machine-id && rm /etc/hostname
+RUN apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm -rf /var/lib/dbus/machine-id && rm -rf /etc/hostname
 RUN apt-get clean
