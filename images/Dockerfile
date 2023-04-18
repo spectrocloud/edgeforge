@@ -48,7 +48,7 @@ COPY overlay/files/ /
 #             dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
 #             ln -sf "initrd-${kernel}" /boot/initrd
 # RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
-RUN apt-get clean
+# RUN apt-get clean
    
     
 ############################Do not edit above this line##################################
