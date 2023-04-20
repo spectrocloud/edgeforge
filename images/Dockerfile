@@ -27,13 +27,19 @@ RUN mkdir -p /etc/luet/repos.conf.d && \
 
 RUN luet install -y  k8s/k3s@$K8S_VERSION && luet cleanup
 
-
-ENV OS_ID=ubuntu
-ENV OS_VERSION=22.04
-ENV OS_NAME=${BASE_IMAGE_NAME}-k3s:${SPECTRO_VERSION}
+ENV OS_ID=${BASE_IMAGE_NAME}-k3s
+ENV OS_NAME=$OS_ID:${SPECTRO_VERSION}
 ENV OS_REPO=${IMAGE_REPOSITORY}
+ENV OS_VERSION=${K8S_VERSION}_${SPECTRO_VERSION}
 ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
 RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
+
+# ENV OS_ID=ubuntu
+# ENV OS_VERSION=22.04
+# ENV OS_NAME=${BASE_IMAGE_NAME}-k3s:${SPECTRO_VERSION}
+# ENV OS_REPO=${IMAGE_REPOSITORY}
+# ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
+# RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
 
 RUN apt-get update && apt-get install zstd -y
    
