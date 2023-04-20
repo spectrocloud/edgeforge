@@ -1,6 +1,6 @@
 ############################Do not edit below this line##################################
 ARG BASE_IMAGE_TAG=v1.5.0
-ARG BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:v1.5.0
+ARG BASE_IMAGE=quay.io/kairos/core-ubuntu-22-lts:${BASE_IMAGE_TAG}
 ARG IMAGE_REPOSITORY=registry.hub.docker.com/3pings/ubuntu-k3s
 ARG SPECTRO_VERSION=v3.3.3
 ARG SPECTRO_LUET_VERSION=v1.0.3
@@ -27,34 +27,27 @@ RUN mkdir -p /etc/luet/repos.conf.d && \
 
 RUN luet install -y  k8s/k3s@$K8S_VERSION && luet cleanup
 
+
 ENV OS_ID=${BASE_IMAGE_NAME}-k3s
 ENV OS_NAME=$OS_ID:${SPECTRO_VERSION}
 ENV OS_REPO=${IMAGE_REPOSITORY}
 ENV OS_VERSION=${K8S_VERSION}_${SPECTRO_VERSION}
 ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
 RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
-
-# ENV OS_ID=ubuntu
-# ENV OS_VERSION=22.04
-# ENV OS_NAME=${BASE_IMAGE_NAME}-k3s:${SPECTRO_VERSION}
-# ENV OS_REPO=${IMAGE_REPOSITORY}
-# ENV OS_LABEL=${BASE_IMAGE_TAG}_${K8S_VERSION}_${SPECTRO_VERSION}
-# RUN envsubst >/etc/os-release </usr/lib/os-release.tmpl
-
+   
 RUN apt-get update && apt-get install zstd -y
    
     
 ## Copy any custom files by placing in the directory specified below
 COPY overlay/files/ /
    
-RUN apt-get update && apt-get upgrade -y
+RUN apt-get update -y
 RUN kernel=$(ls /boot/vmlinuz-* | head -n1) && \
             ln -sf "${kernel#/boot/}" /boot/vmlinuz
 RUN kernel=$(ls /lib/modules | head -n1) && \
             dracut -f "/boot/initrd-${kernel}" "${kernel}" && \
             ln -sf "initrd-${kernel}" /boot/initrd
 RUN kernel=$(ls /lib/modules | head -n1) && depmod -a "${kernel}"
-# RUN apt-get install -y shim-signed mokutil grub-efi-amd64-signed
 RUN apt-get clean
    
     
@@ -70,6 +63,4 @@ RUN apt-get clean
 ##########################################################################################
 RUN rm -f /etc/ssh/ssh_host_* /etc/ssh/moduli
 # Clear cache
-RUN rm -rf /var/cache/*
-RUN apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm -rf /var/lib/dbus/machine-id && rm -rf /etc/hostname
-RUN apt-get clean
+RUN rm -rf /var/cache/* && apt-get clean && rm -rf /var/cache/* && journalctl --vacuum-size=1K && rm /etc/machine-id && rm -rf /var/lib/dbus/machine-id && rm -rf /etc/hostname
