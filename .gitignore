@@ -1,3 +1,5 @@
 ISO/*
 CanvOS/*
-*.conf
+*
+!.gitignore
+!build.sh
