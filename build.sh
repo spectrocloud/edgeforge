@@ -31,6 +31,8 @@ elif [ -f $1 ]; then
   [ -f arg/$EF_ARG ] || exit_on_error "File arg/$EF_ARG not found! Exiting..."
   [ -f userdata/$EF_USERDATA ] || exit_on_error "File userdata/$EF_USERDATA not found! Exiting..."
   [ -z "${EF_DOCKER}" ] || [ -f docker/$EF_DOCKER ] || exit_on_error "File docker/$EF_DOCKER not found! Exiting..."
+  [ -z "${EF_CONTENT}" ] || [ -d content/$EF_CONTENT ] || exit_on_error "Directory content/$EF_CONTENT not found! Exiting..."
+  [ -z "${EF_SECUREBOOT}" ] || [ -d secureboot/$EF_SECUREBOOT ] || exit_on_error "Directory secureboot/$EF_SECUREBOOT not found! Exiting..."
   echo -e "${GREEN}Settings validated.${NC}"
 
   echo -e "${GREEN}Switching to CanvOS tag $EF_CANVOS_TAG...${NC}"
@@ -60,18 +62,49 @@ elif [ -f $1 ]; then
     echo "" >> Dockerfile
     cat ../docker/$EF_DOCKER >> Dockerfile
   fi
+  if [ ! -z "${EF_SECUREBOOT}" ]; then
+    echo -e "${GREEN}Copying secureboot/$EF_SECUREBOOT into CanvOS...${NC}"
+    mkdir -p secure-boot
+    cp -r ../secureboot/$EF_SECUREBOOT/* ./secure-boot/ || exit_on_error "Failed to copy secureboot/$EF_SECUREBOOT into CanvOS!"
+  fi
+  if [ ! -z "${EF_CONTENT}" ]; then
+    CONTENT_DIRS=$(ls -w1 ../content/$EF_CONTENT/)
+    for d in $CONTENT_DIRS; do
+      echo -e "${GREEN}Moving content/$EF_CONTENT/$d into CanvOS...${NC}"
+      mv ../content/$EF_CONTENT/$d ./ || exit_on_error "Failed to move content/$EF_CONTENT/$d into CanvOS!"
+    done
+  fi
   echo -e "${GREEN}Settings successfully copied into CanvOS.${NC}"
 
   echo -e "${GREEN}Running CanvOS...${NC}"
-  ./earthly.sh "${@:2}" || exit_on_error "CanvOS run failed!"
-  echo -e "${GREEN}CanvOS completed successfully, checking for ISO outputs...${NC}"
-  cd ..
-  if [ -n "$(ls -A CanvOS/build 2>/dev/null)" ]; then
-    echo -e "${GREEN}CanvOS generated an ISO, moving it to ISO/$1...${NC}"
-    mkdir -p ISO/$1
-    mv CanvOS/build/* ISO/$1/
+  ./earthly.sh "${@:2}"
+
+  if [ "$?" == "0" ]; then
+    echo -e "${GREEN}CanvOS completed successfully, continuing...${NC}"
+    echo -e "${GREEN}Checking for ISO outputs...${NC}"
+    cd ..
+    if [ -n "$(ls -A CanvOS/build 2>/dev/null)" ]; then
+      echo -e "${GREEN}CanvOS generated an ISO, moving it to ISO/$1...${NC}"
+      mkdir -p ISO/$1
+      mv CanvOS/build/* ISO/$1/
+    fi
+    if [ ! -z "${EF_SECUREBOOT}" ]; then
+      echo -e "${GREEN}Syncing CanvOS secure-boot back to secureboot/$EF_SECUREBOOT as contents may have updated...${NC}"
+      cp -r CanvOS/secure-boot/* secureboot/$EF_SECUREBOOT/ || echo -e "${RED}Failed to sync secure-boot back to secureboot/$EF_SECUREBOOT!${NC}"
+    fi
+  else
+    echo -e "${RED}CanvOS run failed, performing cleanup tasks for content and/or secureboot if necessary...${NC}"
+    cd ..
   fi
-  echo -e "${GREEN}All done!${NC}"
+
+  if [ ! -z "${EF_CONTENT}" ]; then
+    for d in $CONTENT_DIRS; do
+      echo -e "${GREEN}Moving CanvOS/$d back to content/$EF_CONTENT/...${NC}"
+      mv CanvOS/$d content/$EF_CONTENT/ || echo -e "${RED}Failed to move CanvOS/$d to content/$EF_CONTENT/!${NC}"
+    done
+  fi
+
+  echo -e "${GREEN}Run completed.${NC}"
 else
   exit_on_error "Specified config $1 not found!"
 fi
