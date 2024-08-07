@@ -8,6 +8,8 @@ edgeforge/
 ├─ docker/        extra Dockerfile content files (optional)
 ├─ secureboot/    Trusted Boot directories (optional)
 ├─ userdata/      user-data files
+my-config         A file that references specific combinations of the above
+my-config-2       Another file that references specific combinations of the above
 ```
 
 You can then create files in the root of the repo that combine your configuration files for a CanvOS run:
