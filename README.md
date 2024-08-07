@@ -14,12 +14,26 @@ You can then create files in the root of the repo that combine your configuratio
 `my-config`
 ```
 EF_CANVOS_TAG=v4.4.6
-EF_ARG=ubuntu-2204-standard
+EF_ARG=ubuntu-2204-k8s-129
 EF_DOCKER=open-iscsi                          # optional
 EF_USERDATA=custeng-prod
 EF_CONTENT=demo                               # optional
 EF_CUSTOM_TAG=demo-44-u22                     # optional
 EF_ISO_NAME=palette-edge-installer-44-u22     # optional
+```
+
+The example above would expect the following content to exist:
+```
+edgeforge/
+├─ arg/
+│  ├─ ubuntu-2204-k8s-129                     .arg file with your desired OS + K8S config
+├─ content/
+│  ├─ demo/                                   must contain a content-xxxxxxxx subdirectory with precached conent
+│  │  ├─ content-2955e6ac/                    precached content previously generated with palette-edge CLI
+├─ docker/
+│  ├─ open-iscsi                              additional Dockerfile content to be add onto the CanvOS Dockerfile
+├─ userdata/
+│  ├─ custeng-prod                            user-data with your desired config
 ```
 
 Finally, use `build.sh` to perform a CanvOS run with your desired EdgeForge configuration:
