@@ -1,0 +1,6 @@
+EF_CANVOS_TAG=v4.4.6
+EF_ARG=.example
+EF_DOCKER=.example
+EF_USERDATA=.example
+EF_CUSTOM_TAG=demo-44-u22
+EF_ISO_NAME=palette-edge-installer-44-u22

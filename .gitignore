@@ -1,6 +1,7 @@
-ISO/*
-CanvOS/*
-*
-!.gitignore
-!.example
-!build.sh
+/*
+!/.example
+!/build.sh
+!/arg/.example
+!/docker/.example
+!/userdata/.example
+!/.gitignore

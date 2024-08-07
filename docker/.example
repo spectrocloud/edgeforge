@@ -1,0 +1,2 @@
+# Example that adds open-iscsi for Longhorn
+RUN apt-get update && apt-get install -y open-iscsi && systemctl disable iscsi.service
