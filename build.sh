@@ -86,7 +86,7 @@ elif [ -f $1 ]; then
     if [ -n "$(ls -A CanvOS/build 2>/dev/null)" ]; then
       echo -e "${GREEN}CanvOS generated an ISO, moving it to ISO/$1...${NC}"
       mkdir -p ISO/$1
-      mv CanvOS/build/* ISO/$1/
+      sudo mv CanvOS/build/* ISO/$1/
     fi
     if [ ! -z "${EF_SECUREBOOT}" ]; then
       echo -e "${GREEN}Syncing CanvOS secure-boot back to secureboot/$EF_SECUREBOOT as contents may have updated...${NC}"
