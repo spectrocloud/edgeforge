@@ -4,9 +4,9 @@ This repository enables you to structure your configuration files for CanvOS:
 ```
 edgeforge/
 ├─ arg/           .arg files
-├─ content/       precached content (optional)
-├─ docker/        extra Dockerfile content (optional)
-├─ secureboot/    Trusted Boot files (optional)
+├─ content/       precached content directories (optional)
+├─ docker/        extra Dockerfile content files (optional)
+├─ secureboot/    Trusted Boot directories (optional)
 ├─ userdata/      user-data files
 ```
 
@@ -35,7 +35,11 @@ edgeforge/
 ├─ docker/
 │  ├─ open-iscsi                              additional Dockerfile content to be add onto the CanvOS Dockerfile
 ├─ secureboot/
-│  ├─ demo/                                   directory containing the content that needs to go into the secure-boot subdirectory of CanvOS
+│  ├─ demo/                                   directory containing all that needs to go into the secure-boot subdirectory of CanvOS
+│  │  ├─ enrollment/
+│  │  ├─ exported-keys/
+│  │  ├─ private-keys/
+│  │  ├─ public-keys/
 ├─ userdata/
 │  ├─ custeng-prod                            user-data with your desired config
 ```
