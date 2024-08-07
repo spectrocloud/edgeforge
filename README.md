@@ -48,6 +48,13 @@ Example:
 ./build.sh my-config --push +build-all-images
 ```
 
+You can pass any legal actions for CanvOS as the 2nd, 3rd, etc parameters, for example:
+```
++iso                       Build an ISO only
++build-provider-images     Build images only, no ISO
++build-all-images          Build images only, no ISO
+```
+
 If CanvOS is not yet preset, it will automatically be cloned into the CanvOS subdirectory.
 Every run, CanvOS gets reset and a fresh `git checkout` of the desired CanvOS tag/branch happens.
 This is to ensure you always work from a clean environment.
