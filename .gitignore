@@ -2,6 +2,8 @@
 !/.example
 !/build.sh
 !/arg/.example
+!/content/.gitkeep
 !/docker/.example
+!/secureboot/.gitkeep
 !/userdata/.example
 !/.gitignore
