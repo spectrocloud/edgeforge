@@ -6,6 +6,7 @@ edgeforge/
 ├─ arg/           .arg files
 ├─ content/       precached content (optional)
 ├─ docker/        extra Dockerfile content (optional)
+├─ secureboot/    Trusted Boot files (optional)
 ├─ userdata/      user-data files
 ```
 
@@ -17,6 +18,7 @@ EF_CANVOS_TAG=v4.4.6
 EF_ARG=ubuntu-2204-k8s-129
 EF_DOCKER=open-iscsi                          # optional
 EF_USERDATA=custeng-prod
+EF_SECUREBOOT=demo                            # optional
 EF_CONTENT=demo                               # optional
 EF_CUSTOM_TAG=demo-44-u22                     # optional
 EF_ISO_NAME=palette-edge-installer-44-u22     # optional
@@ -32,6 +34,8 @@ edgeforge/
 │  │  ├─ content-2955e6ac/                    precached content previously generated with palette-edge CLI
 ├─ docker/
 │  ├─ open-iscsi                              additional Dockerfile content to be add onto the CanvOS Dockerfile
+├─ secureboot/
+│  ├─ demo/                                   directory containing the content that needs to go into the secure-boot subdirectory of CanvOS
 ├─ userdata/
 │  ├─ custeng-prod                            user-data with your desired config
 ```
