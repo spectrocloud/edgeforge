@@ -62,7 +62,7 @@ You can pass any legal actions for CanvOS as the 2nd, 3rd, etc parameters, for e
 ```
 +iso                       Build an ISO only
 +build-provider-images     Build images only, no ISO
-+build-all-images          Build images only, no ISO
++build-all-images          Build all images and the ISO
 ```
 
 If CanvOS is not yet preset, it will automatically be cloned into the CanvOS subdirectory.
