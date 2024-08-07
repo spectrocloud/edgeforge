@@ -2,4 +2,5 @@ ISO/*
 CanvOS/*
 *
 !.gitignore
+!.example
 !build.sh
