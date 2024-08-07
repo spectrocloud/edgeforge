@@ -1,1 +1,0 @@
-Added spectro generated content in this directory
