@@ -14,9 +14,9 @@ You can then create files in the root of the repo that combine your configuratio
 `my-config`
 ```
 EF_CANVOS_TAG=v4.4.6
-EF_ARG=.example
-EF_DOCKER=.example                            # optional
-EF_USERDATA=.example
+EF_ARG=ubuntu-2204-standard
+EF_DOCKER=open-iscsi                          # optional
+EF_USERDATA=custeng-prod
 EF_CONTENT=demo                               # optional
 EF_CUSTOM_TAG=demo-44-u22                     # optional
 EF_ISO_NAME=palette-edge-installer-44-u22     # optional
