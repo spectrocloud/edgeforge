@@ -3,4 +3,7 @@ EF_ARG=.example
 EF_DOCKER=.example
 EF_USERDATA=.example
 EF_CUSTOM_TAG=demo-44-u22
+EF_K8S_VERSION=1.29.6
 EF_ISO_NAME=palette-edge-installer-44-u22
+#EF_CONTENT=demo
+#EF_SECUREBOOT=demo

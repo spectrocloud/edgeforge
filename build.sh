@@ -39,7 +39,9 @@ elif [ -f $1 ]; then
   cd CanvOS
   if [ -d build ]; then rm -rf build/; fi
   git reset -q --hard || exit_on_error "Failed to do git reset on CanvOS!"
+  git fetch
   git checkout -q $EF_CANVOS_TAG || exit_on_error "Failed to switch to CanvOS tag $EF_CANVOS_TAG"
+  sed -i 's/net.ipv4.conf.all.rp_filter=1/net.ipv4.conf.all.rp_filter=0/' cis-harden/harden.sh
   echo -e "${GREEN}CanvOS preparation complete.${NC}"
 
   echo -e "${GREEN}Copying settings from $1 to CanvOS...${NC}"
@@ -55,6 +57,12 @@ elif [ -f $1 ]; then
     sed -i '/ISO_NAME/d' .arg
     echo "" >> .arg
     echo "ISO_NAME=${EF_ISO_NAME}" >> .arg
+  fi
+  if [ ! -z "${EF_K8S_VERSION}" ]; then
+    echo -e "${GREEN}Overriding K8S_VERSION parameter in .arg to $EF_K8S_VERSION${NC}"
+    sed -i '/K8S_VERSION/d' .arg
+    echo "" >> .arg
+    echo "K8S_VERSION=${EF_K8S_VERSION}" >> .arg
   fi
   cp ../userdata/$EF_USERDATA user-data || exit_on_error "Failed to copy ../userdata/$EF_USERDATA to user-data!"
   if [ ! -z "${EF_DOCKER}" ]; then

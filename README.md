@@ -16,8 +16,9 @@ You can then create files in the root of the repo that combine your configuratio
 
 `my-config`
 ```
-EF_CANVOS_TAG=v4.4.6
-EF_ARG=ubuntu-2204-k8s-129
+EF_CANVOS_TAG=v4.4.8
+EF_ARG=ubuntu-2204-pxke
+EF_K8S_VERSION=1.29.6                         # optional (overrides K8S version to build)
 EF_DOCKER=open-iscsi                          # optional
 EF_USERDATA=custeng-prod
 EF_SECUREBOOT=demo                            # optional
@@ -30,7 +31,7 @@ The example above would expect the following content to exist:
 ```
 edgeforge/
 ├─ arg/
-│  ├─ ubuntu-2204-k8s-129                     .arg file with your desired OS + K8S config
+│  ├─ ubuntu-2204-pxke                       .arg file with your desired OS + K8S distro
 ├─ content/
 │  ├─ demo/                                   must contain a content-xxxxxxxx subdirectory with precached conent
 │  │  ├─ content-2955e6ac/                    precached content previously generated with palette-edge CLI
