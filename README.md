@@ -56,7 +56,8 @@ Usage:
 Example:
 --------
 ./build.sh my-config +iso
-./build.sh my-config --push +build-all-images
+./build.sh my-config +build-all-images
+./build.sh my-config --push +build-provider-images
 ```
 
 You can pass any legal actions for CanvOS as the 2nd, 3rd, etc parameters, for example:

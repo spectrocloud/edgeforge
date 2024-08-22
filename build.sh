@@ -18,7 +18,8 @@ if [ "$1" == "" ] || [ "$2" == "" ]; then
   echo "Example:"
   echo "--------"
   echo "./build.sh my-config +iso"
-  echo "./build.sh my-config --push +build-all-images"
+  echo "./build.sh my-config +build-all-images"
+  echo "./build.sh my-config --push +build-provider-images"
   echo -e "${NC}"
   exit_on_error "No config specified!"
 elif [ -f $1 ]; then
