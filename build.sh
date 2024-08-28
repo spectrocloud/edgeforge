@@ -34,6 +34,7 @@ elif [ -f $1 ]; then
   [ -z "${EF_DOCKER}" ] || [ -f docker/$EF_DOCKER ] || exit_on_error "File docker/$EF_DOCKER not found! Exiting..."
   [ -z "${EF_CONTENT}" ] || [ -d content/$EF_CONTENT ] || exit_on_error "Directory content/$EF_CONTENT not found! Exiting..."
   [ -z "${EF_SECUREBOOT}" ] || [ -d secureboot/$EF_SECUREBOOT ] || exit_on_error "Directory secureboot/$EF_SECUREBOOT not found! Exiting..."
+  [ -z "${EF_EXTRAFILES}" ] || [ -d extrafiles/$EF_EXTRAFILES ] || exit_on_error "Directory extrafiles/$EF_EXTRAFILES not found! Exiting..."
   echo -e "${GREEN}Settings validated.${NC}"
 
   echo -e "${GREEN}Switching to CanvOS tag $EF_CANVOS_TAG...${NC}"
@@ -75,6 +76,11 @@ elif [ -f $1 ]; then
     echo -e "${GREEN}Copying secureboot/$EF_SECUREBOOT into CanvOS...${NC}"
     mkdir -p secure-boot
     cp -r ../secureboot/$EF_SECUREBOOT/* ./secure-boot/ || exit_on_error "Failed to copy secureboot/$EF_SECUREBOOT into CanvOS!"
+  fi
+
+  if [ ! -z "${EF_EXTRAFILES}" ]; then
+    echo -e "${GREEN}Copying extrafiles/$EF_EXTRAFILES into CanvOS...${NC}"
+    cp -r ../extrafiles/$EF_EXTRAFILES/* . || exit_on_error "Failed to copy extrafiles/$EF_EXTRAFILES into CanvOS!"
   fi
   if [ ! -z "${EF_CONTENT}" ]; then
     CONTENT_DIRS=$(ls -w1 ../content/$EF_CONTENT/)

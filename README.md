@@ -6,6 +6,7 @@ edgeforge/
 ├─ arg/           .arg files
 ├─ content/       precached content directories (optional)
 ├─ docker/        extra Dockerfile content files (optional)
+├─ extrafiles/    Directories containing any extra files you want to copied directly into CanvOS (optional)
 ├─ secureboot/    Trusted Boot directories (optional)
 ├─ userdata/      user-data files
 my-config         A file that references specific combinations of the above
@@ -25,6 +26,7 @@ EF_SECUREBOOT=demo                            # optional
 EF_CONTENT=demo                               # optional
 EF_CUSTOM_TAG=demo-44-u22                     # optional
 EF_ISO_NAME=palette-edge-installer-44-u22     # optional
+EF_EXTRAFILES=demo                            # optional
 ```
 
 The example above would expect the following content to exist:
@@ -37,6 +39,8 @@ edgeforge/
 │  │  ├─ content-2955e6ac/                    precached content previously generated with palette-edge CLI
 ├─ docker/
 │  ├─ open-iscsi                              additional Dockerfile content to be add onto the CanvOS Dockerfile
+├─ extrafiles/
+│  ├─ demo/                                   any files placed here get copied into the root of CanvOS
 ├─ secureboot/
 │  ├─ demo/                                   directory containing all that needs to go into the secure-boot subdirectory of CanvOS
 │  │  ├─ enrollment/
