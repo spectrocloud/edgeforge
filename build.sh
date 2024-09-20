@@ -41,7 +41,8 @@ elif [ -f $1 ]; then
   cd CanvOS
   if [ -d build ]; then rm -rf build/; fi
   git reset -q --hard || exit_on_error "Failed to do git reset on CanvOS!"
-  git fetch
+  git clean -q -fdx
+  git fetch -q
   git checkout -q $EF_CANVOS_TAG || exit_on_error "Failed to switch to CanvOS tag $EF_CANVOS_TAG"
   sed -i 's/net.ipv4.conf.all.rp_filter=1/net.ipv4.conf.all.rp_filter=0/' cis-harden/harden.sh
   echo -e "${GREEN}CanvOS preparation complete.${NC}"
