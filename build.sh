@@ -99,7 +99,13 @@ elif [ -f $1 ]; then
   echo -e "${GREEN}Settings successfully copied into CanvOS.${NC}"
 
   echo -e "${GREEN}Running CanvOS...${NC}"
-  ./earthly.sh "${@:2}"
+  if [ ! -z "${EF_EARTHLY_NATIVE}" ]; then
+    if [ "${EF_EARTHLY_NATIVE}" = "yes" ]; then
+      earthly "${@:2}"
+    fi
+  else
+    ./earthly.sh "${@:2}"
+  fi
 
   if [ "$?" == "0" ]; then
     echo -e "${GREEN}CanvOS completed successfully, continuing...${NC}"
