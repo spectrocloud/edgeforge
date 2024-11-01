@@ -67,6 +67,12 @@ elif [ -f $1 ]; then
     echo "" >> .arg
     echo "K8S_VERSION=${EF_K8S_VERSION}" >> .arg
   fi
+  if [ ! -z "${EF_PE_VERSION}" ]; then
+    echo -e "${GREEN}Overriding PE_VERSION parameter in .arg to $EF_PE_VERSION${NC}"
+    sed -i '/PE_VERSION/d' .arg
+    echo "" >> .arg
+    echo "PE_VERSION=${EF_PE_VERSION}" >> .arg
+  fi
   cp ../userdata/$EF_USERDATA user-data || exit_on_error "Failed to copy ../userdata/$EF_USERDATA to user-data!"
   if [ ! -z "${EF_DOCKER}" ]; then
     echo -e "${GREEN}Adding Dockerfile content to CanvOS Dockerfile...${NC}"
