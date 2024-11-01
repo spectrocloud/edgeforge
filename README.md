@@ -27,6 +27,7 @@ EF_CONTENT=demo                               # optional
 EF_CUSTOM_TAG=demo-44-u22                     # optional
 EF_ISO_NAME=palette-edge-installer-44-u22     # optional
 EF_EXTRAFILES=demo                            # optional
+EF_NATIVE_EARTHLY=yes                         # optional (doesn't use earthly.sh but uses native earthly instead)
 ```
 
 The example above would expect the following content to exist:
